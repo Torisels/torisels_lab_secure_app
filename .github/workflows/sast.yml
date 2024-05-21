@@ -23,6 +23,7 @@ jobs:
           docker pull mixeway/scanner:latest 
       - name: Run Scan 
         run: | 
+          mvn package
           docker run -e OSS_USERNAME=${{ secrets.OSS_USERNAME }} \
           -e OSS_KEY=${{ secrets.OSS_KEY }} \
           -e MIXEWAY_URL=https://hub.mixeway.io \
