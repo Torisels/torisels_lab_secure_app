@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest 
     steps: 
       - uses: actions/checkout@v1 
+      - name: Install JQ Tool
+        uses: mbround18/install-jq@v1
       - name: Prepare variables 
         id: vars 
         shell: bash 
@@ -33,3 +35,11 @@ jobs:
           -e COMMIT_ID=${{ steps.vars.outputs.sha_short }} \
           -e BRANCH=${{ steps.vars.outputs.branch }} \
           -v "${{ github.workspace }}:/opt/sources" mixeway/scanner:latest
+
+          if jq -e 'length > 0' ${{ github.workspace }}/mixeway_sast_report.json > /dev/null; then
+              echo "Found errors and vulnerabilities"
+              exit 1
+          else
+              echo "App is fine"
+              exit 0
+          fi
